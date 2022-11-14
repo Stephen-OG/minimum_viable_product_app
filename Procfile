@@ -1,0 +1,1 @@
+web: ts-node-esm dist/index.js
