@@ -71,7 +71,6 @@ export const send = async (newTransaction: BaseTransaction): Promise<Transaction
         throw new Error('No receiver with this id!');
     }
     const receiverBalance = receiver[0].balance
-    console.log(receiverBalance)
     
     if (senderTransaction.amount < 1000){
         throw new Error('miminum amout is 1000');
