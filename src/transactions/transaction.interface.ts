@@ -1,6 +1,19 @@
 export interface BaseTransaction {
-    amount: string | null;
-    fee: string | null;
+    amount: number ;
+    fee: number ;
+    type: Type;
+    entry: Entry;
+    user_id: string;
+    sender_id: string;
+    receiver_id: string;
+    created_at: Date;
+    updated_at: Date;
+  };
+
+  export interface Reciever {
+    id: string;
+    amount: number ;
+    fee: number ;
     type: Type;
     entry: Entry;
     user_id: string;
@@ -14,13 +27,14 @@ export interface Transaction extends BaseTransaction {
     id: string;
   };
 
-enum Type {
+export enum Type {
     send = "send",
     withdraw ="withdraw",
-    recieve = "recieve"
+    receive = "receive",
+    fund = "fund"
   }
 
-enum Entry {
+export enum Entry {
     credit = "credit",
     debit = "debit"
   }

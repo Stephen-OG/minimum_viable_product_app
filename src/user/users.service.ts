@@ -1,6 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { db } from "../db/config";
-import connection from '../db/types'
+import connection from '../db/config'
 import { User, BaseUser } from "./user.interface";
 import { Users } from "./users.interface";
 
@@ -10,6 +9,10 @@ export const create = async (newUser: BaseUser): Promise<User> => {
         ...newUser,
         id,
     };
+    //on create the user's balance is 0
+    const now = new Date()
+    createdUser.created_at = now;
+    createdUser.updated_at = now;
     await connection('users').insert(createdUser);
     return createdUser;
 };

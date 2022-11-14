@@ -1,6 +1,7 @@
 export interface BaseUser {
     username: string | null;
     email: string | null;
+    balance: number;
     created_at: Date;
     updated_at: Date;
   };
