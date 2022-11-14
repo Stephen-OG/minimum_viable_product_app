@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node --pretty ./src/index.ts",
+    "start": "node ./src/index.ts",
     "dev": "nodemon ./src/index.ts",
     "knex": "/node_modules/.bin/knex --knexfile src/db/knexfile.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
