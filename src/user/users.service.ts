@@ -1,32 +1,40 @@
 import { v4 as uuid } from "uuid";
 import connection from '../db/config'
 import { User, BaseUser } from "./user.interface";
+import bcrypt from 'bcrypt';
 import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
 import { SECRET_KEY } from "../middleware/auth";
 
 export const create = async (newUser: BaseUser): Promise<User> => {
     const id = uuid();
-    const createdUser = {
+    const user = {
         ...newUser,
         id,
     };
-    //on create the user's balance is 0
+    
+    user.balance = 0 //on create the user's balance is 0
     const now = new Date()
-    createdUser.created_at = now;
-    createdUser.updated_at = now;
-    await connection('users').insert(createdUser);
-    return createdUser;
+    user.created_at = now;
+    user.updated_at = now;
+    user.password = await bcrypt.hash(user.password, 8)
+    await connection('users').insert(user);
+    return user;
 };
 
-export const signIn = async (username: string, email: string): Promise<any> => {
-    const user = await connection('users').where('username', username).where('email',email)
+export const signIn = async (email: string, password: string): Promise<any> => {
+    const user = await connection('users').where('email', email)
     if(!user[0]){
         throw new Error('no user found')
     }
-    const token = jwt.sign({ username: username, email: email }, SECRET_KEY, {
+    const isMatch = bcrypt.compareSync(password, user[0].password);
+    if (isMatch) {
+    const token = jwt.sign({ email: email }, SECRET_KEY, {
         expiresIn: '2 days',
-      });
-    return token;
+        });
+        return {user: {email}, token: token}
+    } else {
+        throw new Error('Password is not correct');
+    }
 };
 
 export const findAll = async (): Promise<any> => {
@@ -51,6 +59,6 @@ export const update = async (
   };
 
 export const remove = async (id: string): Promise<any> => {
-    const deleteUser = await connection('users').where('id',id).delete()
-    return deleteUser;
+    await connection('users').where('id',id).delete()
+    return id;
 };
