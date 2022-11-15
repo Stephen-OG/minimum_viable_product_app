@@ -69,10 +69,10 @@ transactionRouter.post("/withdraw", auth , async (req:Request, res:Response) => 
     }
   });
 
-  transactionRouter.get("/getbyuserid/:id", auth, async (req:Request, res:Response) => {
-    const id: string = req.params.id
+  transactionRouter.get("/userid/:userid", auth, async (req:Request, res:Response) => {
+    const user_id: string = req.params.userid
     try {
-      const transactions: Transaction[] = await transactionService.findByUserId(id);
+      const transactions: Transaction[] = await transactionService.findByUserId(user_id);
   
       res.status(200).send(transactions);
     } catch (e) {

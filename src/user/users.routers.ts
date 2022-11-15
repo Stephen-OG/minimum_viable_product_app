@@ -5,7 +5,7 @@ import { auth } from "../middleware/auth";
 
 export const userRouter:Router = express();
 
-userRouter.post("/create", async (req:Request, res:Response) => {
+userRouter.post("/", async (req:Request, res:Response) => {
   const user: BaseUser = req.body;
   try {
     const newUser = await UserService.create(user);
@@ -64,7 +64,7 @@ userRouter.post("/create", async (req:Request, res:Response) => {
     }
   });
 
-  userRouter.delete("/remove", async (req:Request, res:Response) => {
+  userRouter.delete("/", async (req:Request, res:Response) => {
     const id: string = req.params.id
     try {
       const deleteUser = await UserService.remove(id);
