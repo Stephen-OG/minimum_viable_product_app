@@ -1,4 +1,4 @@
-import express, {Request,Response,Application} from 'express';
+import express, {Request,Response} from 'express';
 import app from './app'
 import dotenv from "dotenv";
 dotenv.config();

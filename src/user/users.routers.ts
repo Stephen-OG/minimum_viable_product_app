@@ -1,6 +1,7 @@
 import express, { Request, Response, Router } from "express";
 import * as UserService from "./users.service"
 import { BaseUser, User } from "./user.interface";
+import { auth } from "../middleware/auth";
 
 export const userRouter:Router = express();
 
@@ -11,11 +12,23 @@ userRouter.post("/create", async (req:Request, res:Response) => {
 
     res.status(200).send(newUser)
   } catch (e) {
-    console.log(e)
-    res.status(500).send('can not create user');
+    res.status(500).send('unable to create user');
   }
     
   });
+
+  userRouter.post("/signin", async (req:Request, res:Response) => {
+    const {username,email} = req.body;
+    try {
+      const foundUser = await UserService.signIn(username,email);
+  
+      res.status(200).send(foundUser)
+    } catch (e) {
+      console.log(e)
+      res.status(500).send('unable to signin');
+    }
+      
+    });
 
   userRouter.get("/", async (req:Request, res:Response) => {
     try {
@@ -34,7 +47,6 @@ userRouter.post("/create", async (req:Request, res:Response) => {
   
       res.status(200).send(user);
     } catch (e) {
-      console.log(e)
       res.status(500).send('cannot get user');
     }
   });
@@ -48,7 +60,6 @@ userRouter.post("/create", async (req:Request, res:Response) => {
 
       res.status(200).json(updatedUser);
     } catch (e) {
-      console.log(e)
       res.status(500).send('cannot update user');
     }
   });
