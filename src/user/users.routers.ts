@@ -18,9 +18,9 @@ userRouter.post("/", async (req:Request, res:Response) => {
   });
 
   userRouter.post("/signin", async (req:Request, res:Response) => {
-    const {username,email} = req.body;
+    const {email,password} = req.body;
     try {
-      const foundUser = await UserService.signIn(username,email);
+      const foundUser = await UserService.signIn(email,password);
   
       res.status(200).send(foundUser)
     } catch (e) {
@@ -40,7 +40,7 @@ userRouter.post("/", async (req:Request, res:Response) => {
     }
   });
   
-  userRouter.get("/:id", async (req:Request, res:Response) => {
+  userRouter.get("/:id", auth, async (req:Request, res:Response) => {
     const id: string = req.params.id
     try {
       const user: User = await UserService.findById(id);
@@ -51,7 +51,7 @@ userRouter.post("/", async (req:Request, res:Response) => {
     }
   });
 
-  userRouter.put("/:id", async (req:Request, res:Response) => {
+  userRouter.put("/:id", auth, async (req:Request, res:Response) => {
     const id: string = req.params.id
     const user: BaseUser = req.body;
     try {
@@ -64,7 +64,7 @@ userRouter.post("/", async (req:Request, res:Response) => {
     }
   });
 
-  userRouter.delete("/", async (req:Request, res:Response) => {
+  userRouter.delete("/:id", auth, async (req:Request, res:Response) => {
     const id: string = req.params.id
     try {
       const deleteUser = await UserService.remove(id);
