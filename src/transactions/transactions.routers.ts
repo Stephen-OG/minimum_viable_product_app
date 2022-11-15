@@ -1,10 +1,11 @@
 import express, { Request, Response, Router } from "express";
 import * as transactionService from "./transactions.service"
 import { Transaction, BaseTransaction } from "./transaction.interface";
+import { auth } from "../middleware/auth";
 
 export const transactionRouter:Router = express();
 
-transactionRouter.post("/fund", async (req:Request, res:Response) => {
+transactionRouter.post("/fund", auth , async (req:Request, res:Response) => {
   const transaction: BaseTransaction = req.body;
   try {
     
@@ -18,7 +19,7 @@ transactionRouter.post("/fund", async (req:Request, res:Response) => {
     
   });
 
-  transactionRouter.post("/send", async (req:Request, res:Response) => {
+  transactionRouter.post("/send", auth , async (req:Request, res:Response) => {
     const transaction: BaseTransaction = req.body;
     try {
       
@@ -32,7 +33,7 @@ transactionRouter.post("/fund", async (req:Request, res:Response) => {
       
     });
 
-transactionRouter.post("/withdraw", async (req:Request, res:Response) => {
+transactionRouter.post("/withdraw", auth , async (req:Request, res:Response) => {
     const transaction: BaseTransaction = req.body;
     try {
         
@@ -46,7 +47,7 @@ transactionRouter.post("/withdraw", async (req:Request, res:Response) => {
         
     });
 
-  transactionRouter.get("/", async (req:Request, res:Response) => {
+  transactionRouter.get("/", auth, async (req:Request, res:Response) => {
     try {
       const transactions: Transaction[] = await transactionService.findAll();
   
@@ -56,7 +57,7 @@ transactionRouter.post("/withdraw", async (req:Request, res:Response) => {
     }
   });
   
-  transactionRouter.get("/:id", async (req:Request, res:Response) => {
+  transactionRouter.get("/:id", auth, async (req:Request, res:Response) => {
     const id: string = req.params.id
     try {
       const transaction: Transaction = await transactionService.findById(id);
@@ -68,10 +69,10 @@ transactionRouter.post("/withdraw", async (req:Request, res:Response) => {
     }
   });
 
-  transactionRouter.get("/getbyuserid/:id", async (req:Request, res:Response) => {
-    const id: string = req.params.id
+  transactionRouter.get("/userid/:userid", auth, async (req:Request, res:Response) => {
+    const user_id: string = req.params.userid
     try {
-      const transactions: Transaction[] = await transactionService.findByUserId(id);
+      const transactions: Transaction[] = await transactionService.findByUserId(user_id);
   
       res.status(200).send(transactions);
     } catch (e) {
